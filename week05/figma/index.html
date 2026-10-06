@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 화면</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        body {
+            background-color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #1C2430;
+        }
+
+        /* Container mimicking the 390x844 design but responsive */
+        .login-container {
+            width: 100%;
+            max-width: 390px;
+            height: 100vh;
+            max-height: 844px;
+            padding: 72px 24px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            background-color: #FFFFFF;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1C2430;
+        }
+
+        .header p {
+            font-size: 15px;
+            font-weight: 400;
+            color: #667085;
+        }
+
+        /* Form Section */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #667085;
+        }
+
+        .input-wrapper {
+            display: flex;
+            padding: 14px;
+            background-color: #F7F7FA;
+            border: 1px solid #DEE3E8;
+            border-radius: 10px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 15px;
+            color: #667085;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #667085;
+        }
+
+        /* Button Section */
+        .btn-primary {
+            margin-top: 8px;
+            padding: 16px 0;
+            background-color: #2663EB;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* Footer Section */
+        .footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        .footer-text {
+            color: #667085;
+            font-weight: 400;
+        }
+
+        .footer-link {
+            color: #2663EB;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Mobile adjustments for height */
+        @media (max-height: 844px) {
+            .login-container {
+                height: auto;
+                min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <header class="header">
+            <h1>다시 만나서 반갑습니다</h1>
+            <p>학교 이메일로 로그인하세요</p>
+        </header>
+
+        <form class="form" onsubmit="return false;">
+            <div class="field-group">
+                <label class="label">이메일</label>
+                <div class="input-wrapper">
+                    <input type="email" placeholder="아이디@daelim.ac.kr">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="label">비밀번호</label>
+                <div class="input-wrapper">
+                    <input type="password" placeholder="8자 이상">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">로그인</button>
+        </form>
+
+        <footer class="footer">
+            <span class="footer-text">계정이 없으신가요?</span>
+            <a href="#" class="footer-link">회원가입</a>
+        </footer>
+    </div>
+</body>
+</html>

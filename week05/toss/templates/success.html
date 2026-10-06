@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>결제 결과</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f3f3f3; width: 140px; }
+    pre { background: #f6f6f6; padding: 12px; overflow-x: auto; font-size: 13px; }
+  </style>
+</head>
+<body>
+{% if ok %}
+  <h2>결제 완료</h2>
+  <table>
+    <tr><th>status</th><td>{{ data.status }}</td></tr>
+    <tr><th>orderName</th><td>{{ data.orderName }}</td></tr>
+    <tr><th>totalAmount</th><td>{{ data.totalAmount }}</td></tr>
+    <tr><th>method</th><td>{{ data.method }}</td></tr>
+    <tr><th>approvedAt</th><td>{{ data.approvedAt }}</td></tr>
+  </table>
+{% else %}
+  <h2>승인 실패</h2>
+  <table>
+    <tr><th>HTTP 상태</th><td>{{ status_code }}</td></tr>
+    <tr><th>code</th><td>{{ code }}</td></tr>
+    <tr><th>message</th><td>{{ message }}</td></tr>
+  </table>
+{% endif %}
+{% if raw %}
+  <h3>응답 원본</h3>
+  <pre>{{ raw }}</pre>
+{% endif %}
+  <p><a href="/">처음으로</a></p>
+</body>
+</html>
