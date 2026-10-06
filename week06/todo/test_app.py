@@ -50,5 +50,14 @@ client.post("/add", data={"title": "나중"})
 html = page()
 check("두 개 추가 -> 나중에 추가한 것이 먼저", html.index("나중") < html.index("먼저"))
 
+# 완료 표시와 해제
+reset()
+client.post("/add", data={"title": "완료할 일"})
+tid = rows()[0]["id"]
+r = client.post(f"/toggle/{tid}")
+check("POST /toggle (있는 번호) -> 302, 완료로 바뀜", r.status_code == 302 and rows()[0]["done"] == 1)
+r = client.post(f"/toggle/{tid}")
+check("POST /toggle 한 번 더 -> 302, 미완료로 돌아옴", r.status_code == 302 and rows()[0]["done"] == 0)
+
 os.remove(path)
 print(f"{sum(results)}/{len(results)} 통과")

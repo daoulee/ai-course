@@ -46,6 +46,13 @@ def add():
     return redirect("/")
 
 
+@app.post("/toggle/<int:todo_id>")
+def toggle(todo_id):
+    get_db().execute("UPDATE todos SET done = 1 - done WHERE id = ?", (todo_id,))
+    get_db().commit()
+    return redirect("/")
+
+
 if __name__ == "__main__":
     init_db()
     app.run(port=5001, debug=True)
