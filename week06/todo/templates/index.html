@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>할 일</title>
+</head>
+<body>
+  <main>
+    <h1>할 일</h1>
+
+    <form class="add" action="/add" method="post">
+      <input name="title" placeholder="할 일을 입력하세요" maxlength="200">
+      <button type="submit">추가</button>
+    </form>
+
+    {% if todos %}
+    <ul class="list">
+      {% for t in todos %}
+      <li>
+        <span class="title">{{ t.title }}</span>
+        <span class="time">{{ t.created_at }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">할 일이 없습니다.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
