@@ -1,0 +1,76 @@
+/* figma 로그인 화면(node 1:2)에서 읽은 값만 쓴다 */
+:root {
+  --bg: #FFFFFF;
+  --text: #1C2430;
+  --sub: #667085;
+  --primary: #2663EB;
+  --input-bg: #F7F7FA;
+  --input-border: #DEE3E8;
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  font-size: 15px;
+}
+
+main {
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 72px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+h1 { font-size: 26px; font-weight: 700; }
+
+.add { display: flex; gap: 8px; }
+
+input {
+  flex: 1;
+  padding: 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--text);
+}
+
+input::placeholder { color: var(--sub); }
+
+button {
+  padding: 0 16px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+
+.list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+}
+
+.list .title { flex: 1; }
+.list .time { color: var(--sub); font-size: 13px; }
+.list button { padding: 6px 10px; font-size: 13px; }
+.done .title { text-decoration: line-through; color: var(--sub); }
+
+.empty, .error { color: var(--sub); }
+a { color: var(--primary); font-weight: 600; text-decoration: none; }
