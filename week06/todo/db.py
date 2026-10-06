@@ -27,7 +27,7 @@ def init_db():
 
 
 def list_todos():
-    return get_db().execute("SELECT * FROM todos ORDER BY id DESC").fetchall()
+    return get_db().execute("SELECT * FROM todos ORDER BY done, id DESC").fetchall()
 
 
 def add_todo(title):

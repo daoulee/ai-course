@@ -50,6 +50,13 @@ client.post("/add", data={"title": "나중"})
 html = page()
 check("두 개 추가 -> 나중에 추가한 것이 먼저", html.index("나중") < html.index("먼저"))
 
+reset()
+client.post("/add", data={"title": "끝낸 일"})
+client.post("/add", data={"title": "남은 일"})
+client.post(f"/toggle/{rows()[0]['id']}")
+html = page()
+check("완료한 할 일은 아래쪽에 모임", html.index("남은 일") < html.index("끝낸 일"))
+
 # 완료 표시와 해제
 reset()
 client.post("/add", data={"title": "완료할 일"})
