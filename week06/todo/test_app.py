@@ -59,5 +59,9 @@ check("POST /toggle (있는 번호) -> 302, 완료로 바뀜", r.status_code == 
 r = client.post(f"/toggle/{tid}")
 check("POST /toggle 한 번 더 -> 302, 미완료로 돌아옴", r.status_code == 302 and rows()[0]["done"] == 0)
 
+# 삭제
+r = client.post(f"/delete/{tid}")
+check("POST /delete (있는 번호) -> 302, 목록에서 사라짐", r.status_code == 302 and rows() == [])
+
 os.remove(path)
 print(f"{sum(results)}/{len(results)} 통과")

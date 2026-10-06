@@ -53,6 +53,13 @@ def toggle(todo_id):
     return redirect("/")
 
 
+@app.post("/delete/<int:todo_id>")
+def delete(todo_id):
+    get_db().execute("DELETE FROM todos WHERE id = ?", (todo_id,))
+    get_db().commit()
+    return redirect("/")
+
+
 if __name__ == "__main__":
     init_db()
     app.run(port=5001, debug=True)

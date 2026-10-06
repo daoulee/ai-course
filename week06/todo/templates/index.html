@@ -26,6 +26,9 @@
         <form action="/toggle/{{ t.id }}" method="post">
           <button type="submit">{{ '해제' if t.done else '완료' }}</button>
         </form>
+        <form action="/delete/{{ t.id }}" method="post">
+          <button type="submit">삭제</button>
+        </form>
       </li>
       {% endfor %}
     </ul>
