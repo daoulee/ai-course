@@ -63,5 +63,21 @@ check("POST /toggle 한 번 더 -> 302, 미완료로 돌아옴", r.status_code =
 r = client.post(f"/delete/{tid}")
 check("POST /delete (있는 번호) -> 302, 목록에서 사라짐", r.status_code == 302 and rows() == [])
 
+# 잘못된 입력
+reset()
+r = client.post("/add", data={"title": ""})
+check("POST /add 빈 제목 -> 400", r.status_code == 400 and "제목을 입력하세요." in r.get_data(as_text=True))
+r = client.post("/add", data={"title": "   "})
+check("POST /add 공백만 -> 400", r.status_code == 400 and "제목을 입력하세요." in r.get_data(as_text=True))
+r = client.post("/add", data={"title": "가" * 100})
+check("POST /add 100자 -> 302 (경계값 통과)", r.status_code == 302)
+r = client.post("/add", data={"title": "가" * 101})
+check("POST /add 101자 -> 400", r.status_code == 400 and "제목은 100자까지입니다." in r.get_data(as_text=True))
+check("잘못된 입력은 저장되지 않음", len(rows()) == 1)
+r = client.post("/toggle/999")
+check("POST /toggle/999 (없는 번호) -> 404", r.status_code == 404)
+r = client.post("/delete/999")
+check("POST /delete/999 (없는 번호) -> 404", r.status_code == 404)
+
 os.remove(path)
 print(f"{sum(results)}/{len(results)} 통과")

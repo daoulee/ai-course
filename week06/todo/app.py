@@ -1,10 +1,11 @@
 import sqlite3
 from datetime import datetime
 
-from flask import Flask, g, redirect, render_template, request
+from flask import Flask, abort, g, redirect, render_template, request
 
 app = Flask(__name__)
 app.config["DATABASE"] = "todo.db"
+MAX_TITLE = 100
 
 
 def get_db():
@@ -40,6 +41,10 @@ def index():
 @app.post("/add")
 def add():
     title = request.form.get("title", "").strip()
+    if not title:
+        return render_template("error.html", code=400, message="제목을 입력하세요."), 400
+    if len(title) > MAX_TITLE:
+        return render_template("error.html", code=400, message=f"제목은 {MAX_TITLE}자까지입니다."), 400
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     get_db().execute("INSERT INTO todos (title, created_at) VALUES (?, ?)", (title, now))
     get_db().commit()
@@ -48,16 +53,25 @@ def add():
 
 @app.post("/toggle/<int:todo_id>")
 def toggle(todo_id):
-    get_db().execute("UPDATE todos SET done = 1 - done WHERE id = ?", (todo_id,))
+    cur = get_db().execute("UPDATE todos SET done = 1 - done WHERE id = ?", (todo_id,))
+    if cur.rowcount == 0:
+        abort(404)
     get_db().commit()
     return redirect("/")
 
 
 @app.post("/delete/<int:todo_id>")
 def delete(todo_id):
-    get_db().execute("DELETE FROM todos WHERE id = ?", (todo_id,))
+    cur = get_db().execute("DELETE FROM todos WHERE id = ?", (todo_id,))
+    if cur.rowcount == 0:
+        abort(404)
     get_db().commit()
     return redirect("/")
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("error.html", code=404, message="없는 할 일입니다."), 404
 
 
 if __name__ == "__main__":
