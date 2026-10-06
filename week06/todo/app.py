@@ -1,41 +1,22 @@
-import sqlite3
-from datetime import datetime
+from flask import Flask, abort, redirect, render_template, request
 
-from flask import Flask, abort, g, redirect, render_template, request
+import db
+from db import get_db
 
 app = Flask(__name__)
 app.config["DATABASE"] = "todo.db"
+app.teardown_appcontext(db.close_db)
 MAX_TITLE = 100
-
-
-def get_db():
-    if "db" not in g:
-        g.db = sqlite3.connect(app.config["DATABASE"])
-        g.db.row_factory = sqlite3.Row
-    return g.db
-
-
-@app.teardown_appcontext
-def close_db(exc):
-    db = g.pop("db", None)
-    if db is not None:
-        db.close()
 
 
 def init_db():
     with app.app_context():
-        get_db().execute(
-            "CREATE TABLE IF NOT EXISTS todos ("
-            "id INTEGER PRIMARY KEY, title TEXT NOT NULL, "
-            "done INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL)"
-        )
-        get_db().commit()
+        db.init_db()
 
 
 @app.get("/")
 def index():
-    todos = get_db().execute("SELECT * FROM todos ORDER BY id DESC").fetchall()
-    return render_template("index.html", todos=todos)
+    return render_template("index.html", todos=db.list_todos())
 
 
 @app.post("/add")
@@ -45,27 +26,21 @@ def add():
         return render_template("error.html", code=400, message="제목을 입력하세요."), 400
     if len(title) > MAX_TITLE:
         return render_template("error.html", code=400, message=f"제목은 {MAX_TITLE}자까지입니다."), 400
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    get_db().execute("INSERT INTO todos (title, created_at) VALUES (?, ?)", (title, now))
-    get_db().commit()
+    db.add_todo(title)
     return redirect("/")
 
 
 @app.post("/toggle/<int:todo_id>")
 def toggle(todo_id):
-    cur = get_db().execute("UPDATE todos SET done = 1 - done WHERE id = ?", (todo_id,))
-    if cur.rowcount == 0:
+    if not db.toggle_todo(todo_id):
         abort(404)
-    get_db().commit()
     return redirect("/")
 
 
 @app.post("/delete/<int:todo_id>")
 def delete(todo_id):
-    cur = get_db().execute("DELETE FROM todos WHERE id = ?", (todo_id,))
-    if cur.rowcount == 0:
+    if not db.delete_todo(todo_id):
         abort(404)
-    get_db().commit()
     return redirect("/")
 
 

@@ -14,7 +14,8 @@
 
 | 파일 | 내용 |
 | --- | --- |
-| `app.py` | Flask 앱과 라우트 |
+| `app.py` | Flask 앱과 라우트. 데이터베이스는 `db.py`의 함수만 부른다 |
+| `db.py` | 데이터베이스 초기화, 목록 조회, 추가, 완료 전환, 삭제 |
 | `templates/index.html` | 목록과 추가 입력창 |
 | `templates/error.html` | 오류 화면 (400, 404) |
 | `static/style.css` | 화면 스타일 |
