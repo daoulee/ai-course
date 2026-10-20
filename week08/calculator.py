@@ -38,7 +38,7 @@ class ParkingCalculator:
     def calculate_fee(self, start_time_str, end_time_str):
         """
         입력값을 검증하고 요금을 계산함.
-        성공 시 (entry, exit, duration_mins, fee, date_str) 튜플 반환.
+        성공 시 (record, None) 반환.
         실패 시 (None, error_message) 튜플 반환.
         """
         # 1. 빈 값 검사
