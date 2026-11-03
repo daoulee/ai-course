@@ -3,3 +3,6 @@
 __pycache__/
 *.pyc
 .vscode/
+
+week10/*.json
+week10/**/*.pdf
