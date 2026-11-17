@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나눠 내기 계산기</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #e7f3ff;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .result p {
+            margin: 0.5rem 0;
+            color: #333;
+        }
+        .result .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .result .remainder {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>나눠 내기</h1>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="receipt_image">영수증 사진</label>
+                <input type="file" id="receipt_image" name="receipt_image" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label for="total_amount">총 금액 (원)</label>
+                <input type="number" id="total_amount" name="total_amount" placeholder="예: 50000">
+            </div>
+            <div class="form-group">
+                <label for="people_count">인원 수 (명)</label>
+                <input type="number" id="people_count" name="people_count" required placeholder="예: 4">
+            </div>
+            <button type="submit">계산하기</button>
+        </form>
+
+        {% if items %}
+            <div class="items-list">
+                <h3>🧾 영수증 목록</h3>
+                {% for item in items %}
+                    <div class="item" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>{{ item.item }}</span>
+                        <span>{{ "{:,}".format(item.amount) }}원</span>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #eee;">
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label for="total_amount">확인된 금액 (수정 가능)</label>
+                    <input type="number" id="total_amount" name="total_amount" value="{{ total_amount if total_amount is not none else '' }}" placeholder="예: 50000">
+                </div>
+                <div class="form-group">
+                    <label for="people_count">인원 수 (명)</label>
+                    <input type="number" id="people_count" name="people_count" required placeholder="예: 4">
+                </div>
+                <button type="submit" style="background-color: #28a745;">확인 후 계산하기</button>
+            </form>
+        {% endif %}
+
+        {% if per_person is not none %}
+            <div class="result">
+                <p>총 {{ "{:,}".format(total_amount|int) }}원 / {{ people_count }}명</p>
+                <p>1인당 금액</p>
+                <p class="price">{{ "{:,.0f}".format(per_person) }}원</p>
+                {% if remainder is not none and remainder > 0 %}
+                    <p class="remainder">남는 금액: {{ "{:,}".format(remainder) }}원</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
